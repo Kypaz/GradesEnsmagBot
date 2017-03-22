@@ -10,6 +10,8 @@ token = config['token']
 $user_me = config['user']
 $passwd_me = config['passwd']
 $chat_me = config['chat']
+$chat_grp = config['chat_group1']
+$chat_class = config['chat_class']
 
 options = { :namespace => "app", :compress => true }
 $dc = Dalli::Client.new('localhost:11211', options)
@@ -58,16 +60,23 @@ Telegram::Bot::Client.run(token) do |bot|
     while true do
       result, bool = getGrades($user_me,$passwd_me)
       if (!bool)
-        result = "NOUVELLES NOTES : \n" + result
+        newGr = "NOUVELLES NOTES"
+        result = newGr + " : \n" + result
         bot.api.send_message(chat_id: $chat_me, text: result)
+        bot.api.send_message(chat_id: $chat_grp, text: result)
+	bot.api.send_message(chat_id: $chat_class, text: newGr)
+      else
+	#bot.api.send_message(chat_id: $chat_class, text: "TEST")
       end
-      sleep 10
+      sleep 60
     end
   end
   bot.listen do |message|
     case message
     when Telegram::Bot::Types::Message
       case message.text
+      when '/chat_id'
+      	puts(message.chat.id)
       when '/rattrapage'
         puts(message.chat.id)
         grades,bool = getGrades($user_me,$passwd_me)
