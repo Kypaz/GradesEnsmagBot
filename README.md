@@ -1,4 +1,4 @@
-##Setup
+## Setup
 Need to have a file named "param.conf" on server, and set some parameters
 
 Example of a file :
