@@ -28,7 +28,7 @@ def getGrades(user,passwd)
   grades = doc.css("tr td[4]")
   coefs = doc.css("tr td[2]")
   sum = 0.0
-  fullSum = 0.0;
+  fullSum = 0.0
   counter = 0
   result = ''
   subjects.each_with_index do |value,key|
@@ -64,9 +64,7 @@ Telegram::Bot::Client.run(token) do |bot|
         result = newGr + " : \n" + result
         bot.api.send_message(chat_id: $chat_me, text: result)
         bot.api.send_message(chat_id: $chat_grp, text: result)
-	bot.api.send_message(chat_id: $chat_class, text: newGr)
-      else
-	#bot.api.send_message(chat_id: $chat_class, text: "TEST")
+	      bot.api.send_message(chat_id: $chat_class, text: newGr)
       end
       sleep 60
     end

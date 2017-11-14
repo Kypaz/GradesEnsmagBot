@@ -1,5 +1,4 @@
 param.conf
-Gemfile.lock
 .ruby-version
 nohup.out
 
