@@ -14,7 +14,7 @@ Simple bot to get grades from Ensimag Website in Telegram
 
 Password are not stored ;)
 
-## Utilisation
+## Usage
 
 Current bot user name : @GradesEnsmagBot
 
