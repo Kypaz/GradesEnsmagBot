@@ -57,50 +57,50 @@ end
 
 Telegram::Bot::Client.run(token) do |bot|
   begin
-  Thread.new do
-    while true do
-      result, bool = getGrades($user_me,$passwd_me)
-      if (!bool)
-        newGr = "NOUVELLES NOTES"
-        result = newGr + " : \n" + result
-        bot.api.send_message(chat_id: $chat_me, text: result)
-        bot.api.send_message(chat_id: $chat_grp, text: result)
-        bot.api.send_message(chat_id: $chat_class, text: newGr)
-      end
-      sleep 60
-    end
-  end
-  bot.listen do |message|
-    case message
-    when Telegram::Bot::Types::Message
-      case message.text
-      when '/chat_id'
-        puts(message.chat.id)
-      when '/rattrapage'
-        puts(message.chat.id)
-        grades,bool = getGrades($user_me,$passwd_me)
-        if (grades != nil && message.from.username == "kypaz" )
-          bot.api.send_message(chat_id: message.chat.id, text: grades)
+    Thread.new do
+      while true do
+        result, bool = getGrades($user_me,$passwd_me)
+        if (!bool)
+          newGr = "NOUVELLES NOTES"
+          result = newGr + " : \n" + result
+          bot.api.send_message(chat_id: $chat_me, text: result)
+          bot.api.send_message(chat_id: $chat_grp, text: result)
+          bot.api.send_message(chat_id: $chat_class, text: newGr)
         end
-      end
-    when Telegram::Bot::Types::InlineQuery
-      if message.query != ""
-        answers = []
-        data = message.query.split(":")
-        if (data[0] && data[1] != nil)
-          grades,bool = getGrades(data[0],data[1])
-        end
-        if (grades != nil)
-          rtn = "Nom : " + data[0] + "\n" + grades
-          answers << Telegram::Bot::Types::InlineQueryResultArticle.new(
-              id: 0,
-              title: "RATTRAPAGES ?? (user:password)",
-              input_message_content: Telegram::Bot::Types::InputTextMessageContent.new(message_text: rtn, parse_mode: "HTML"))
-          puts bot.api.answer_inline_query(inline_query_id: message.id, results: answers)
-      end
+        sleep 60
       end
     end
-  end
+    bot.listen do |message|
+      case message
+      when Telegram::Bot::Types::Message
+        case message.text
+        when '/chat_id'
+          puts(message.chat.id)
+        when '/rattrapage'
+          puts(message.chat.id)
+          grades,bool = getGrades($user_me,$passwd_me)
+          if (grades != nil && message.from.username == "kypaz" )
+            bot.api.send_message(chat_id: message.chat.id, text: grades)
+          end
+        end
+      when Telegram::Bot::Types::InlineQuery
+        if message.query != ""
+          answers = []
+          data = message.query.split(":")
+          if (data[0] && data[1] != nil)
+            grades,bool = getGrades(data[0],data[1])
+          end
+          if (grades != nil)
+            rtn = "Nom : " + data[0] + "\n" + grades
+            answers << Telegram::Bot::Types::InlineQueryResultArticle.new(
+                id: 0,
+                title: "RATTRAPAGES ?? (user:password)",
+                input_message_content: Telegram::Bot::Types::InputTextMessageContent.new(message_text: rtn, parse_mode: "HTML"))
+            puts bot.api.answer_inline_query(inline_query_id: message.id, results: answers)
+        end
+        end
+      end
+    end
   rescue Telegram::Bot::Exceptions::ResponseError => e
     puts e.message
     puts e.backtrace.inspect
