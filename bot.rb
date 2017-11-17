@@ -101,8 +101,9 @@ Telegram::Bot::Client.run(token) do |bot|
       end
     end
   end
-  rescue Exception => e
+  rescue Telegram::Bot::Exceptions::ResponseError => e
     puts e.message
-    puts e.backtrace.inspect  
+    puts e.backtrace.inspect
+    retry
   end
 end
